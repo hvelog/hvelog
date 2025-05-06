@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Hvelog</title>
+  <style>
+    body {
+      background-color: #e0ffff;
+      font-family: Tahoma, sans-serif;
+      direction: rtl;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #007d8a;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    textarea, input {
+      margin: 10px 0;
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #00bcd4;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #posts {
+      margin-top: 30px;
+    }
+
+    .post {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 15px auto;
+      padding: 15px;
+      width: 90%;
+      max-width: 500px;
+      text-align: right;
+    }
+
+    .post-title {
+      font-weight: bold;
+      font-size: 20px;
+      color: #007d8a;
+    }
+
+    .post-text {
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 14px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="hvelog-logo.png" alt="لوگوی سایت" class="logo">
+    <h1>خاطرات عجیب شما</h1>
+  </header>
+
+  <div>
+    <input type="text" id="titleInput" placeholder="عنوان پست">
+    <br>
+    <textarea id="contentInput" placeholder="متن پست شما..." rows="4"></textarea>
+    <br>
+    <button onclick="addPost()">افزودن پست</button>
+  </div>
+
+  <div id="posts"></div>
+
+  <footer>
+    <p>ارتباط با ما: hsnshapwrjany97@gmail.com</p>
+    <p>در باره ما: این وب‌سایت برای ثبت خاطرات شما ساخته شده است.<br>
+    به هیچ وجه از شما و خاطراتتان سوء استفاده نمی‌شود.<br>
+    این وب‌سایت کاملاً امن است.</p>
+    <p>ساخته شده توسط Hvelog.com</p>
+  </footer>
+
+  <script>
+    let posts = [];
+
+    function loadPosts() {
+      const saved = localStorage.getItem('posts');
+      if (saved) {
+        posts = JSON.parse(saved);
+        posts.forEach(post => renderPost(post.title, post.text));
+      }
+    }
+
+    function renderPost(title, text) {
+      const postDiv = document.createElement("div");
+      postDiv.className = "post";
+
+      const postTitle = document.createElement("div");
+      postTitle.className = "post-title";
+      postTitle.textContent = title;
+
+      const postText = document.createElement("div");
+      postText.className = "post-text";
+      postText.textContent = text;
+
+      postDiv.appendChild(postTitle);
+      postDiv.appendChild(postText);
+      document.getElementById("posts").appendChild(postDiv);
+    }
+
+    function addPost() {
+      const title = document.getElementById("titleInput").value.trim();
+      const text = document.getElementById("contentInput").value.trim();
+
+      if (title && text) {
+        const post = { title, text };
+        posts.push(post);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        renderPost(title, text);
+
+        document.getElementById("titleInput").value = '';
+        document.getElementById("contentInput").value = '';
+      }
+    }
+
+    window.onload = loadPosts;
+  </script>
+
+</body>
+</html>
